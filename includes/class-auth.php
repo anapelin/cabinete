@@ -355,6 +355,24 @@ class MBS_Auth {
         $user = new WP_User($user_id);
         $user->set_role($role);
         
+        // If role is patient, also create entry in mbs_patients table
+        if ($role === 'mbs_patient') {
+            global $wpdb;
+            $wpdb->insert(
+                $wpdb->prefix . 'mbs_patients',
+                array(
+                    'user_id' => $user_id,
+                    'first_name' => sanitize_text_field($data['first_name']),
+                    'last_name' => sanitize_text_field($data['last_name']),
+                    'email' => sanitize_email($data['email']),
+                    'phone' => !empty($data['phone']) ? sanitize_text_field($data['phone']) : null,
+                    'cnp' => $data['cnp'],
+                    'is_active' => 1,
+                ),
+                array('%d', '%s', '%s', '%s', '%s', '%s', '%d')
+            );
+        }
+        
         return $user_id;
     }
     
