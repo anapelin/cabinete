@@ -85,22 +85,31 @@ class MBS_Auth_Form {
             true
         );
         
-        // Enqueue Tailwind CSS
-        wp_enqueue_style(
+        // Enqueue Tailwind CSS CDN as script (correct way)
+        wp_enqueue_script(
             'tailwindcss',
             'https://cdn.tailwindcss.com',
             array(),
-            '3.3.0'
+            '3.3.0',
+            false
         );
         
         // Enqueue auth component
         wp_enqueue_script(
             'mbs-auth-component',
             MBS_PLUGIN_URL . 'assets/js/auth-component.js',
-            array('react', 'react-dom', 'babel-standalone'),
+            array('react', 'react-dom', 'babel-standalone', 'tailwindcss'),
             MBS_VERSION,
             true
         );
+        
+        // Localize script for auth component - provide mbs_ajax if not already defined
+        wp_localize_script('mbs-auth-component', 'mbs_ajax', array(
+            'ajax_url' => admin_url('admin-ajax.php'),
+            'nonce' => wp_create_nonce('mbs_nonce'),
+            'rest_base' => rest_url('mbs/v1'),
+            'rest_nonce' => wp_create_nonce('wp_rest'),
+        ));
         
         // Add Babel type attribute
         add_filter('script_loader_tag', array($this, 'add_type_attribute'), 10, 3);
