@@ -31,22 +31,22 @@ const colors = {
 
 // CNP Validation Function - CNAS Compatible
 const validateCNP = (cnp) => {
-  cnp = cnp.replace(/[\s\-]/g, '');
-  if (!/^\d{13}$/.test(cnp)) return false;
+  const cleanCnp = cnp.replace(/[\s\-]/g, '');
+  if (!/^\d{13}$/.test(cleanCnp)) return false;
   const controlString = '279146358279';
   let sum = 0;
   for (let i = 0; i < 12; i++) {
-    sum += parseInt(cnp[i]) * parseInt(controlString[i]);
+    sum += parseInt(cleanCnp[i]) * parseInt(controlString[i]);
   }
   let controlDigit = sum % 11;
   if (controlDigit === 10) controlDigit = 1;
-  return parseInt(cnp[12]) === controlDigit;
+  return parseInt(cleanCnp[12]) === controlDigit;
 };
 
 // Phone Validation Function
 const validatePhone = (phone) => {
-  phone = phone.replace(/[\s\-\(\)]/g, '');
-  return /^(07\d{8}|(\+4|04)07\d{8})$/.test(phone);
+  const cleanPhone = phone.replace(/[\s\-\(\)]/g, '');
+  return /^(07\d{8}|(\+4|04)07\d{8})$/.test(cleanPhone);
 };
 
 // Icon styles - fixed size to prevent overflow

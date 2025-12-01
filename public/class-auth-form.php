@@ -91,7 +91,7 @@ class MBS_Auth_Form {
             'https://cdn.tailwindcss.com',
             array(),
             '3.3.0',
-            false
+            true
         );
         
         // Enqueue auth component
